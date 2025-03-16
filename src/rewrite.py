@@ -59,6 +59,7 @@ def test(org_sentence: str, syn_sentences: list[str]) -> list[float]:
 
 
 # Deprecated
+"""
 def rewrite1(sentence: str):
 	nlp = spacy.load("en_core_web_lg")
 	sentence_doc = nlp(sentence)
@@ -90,9 +91,13 @@ def rewrite1(sentence: str):
 					syn_sentence = nlp(syn_sentence)
 					print(syn_sentence.text)
 					# print(sentence_doc.similarity(syn_sentence))
+"""
 
 
+# Testing
+"""
 new = rewrite("The boy is here", 1)
 new_scores = test("The boy is here", new)
 print(new)
 print(new_scores)
+"""

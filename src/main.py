@@ -11,4 +11,16 @@ There are two files
 2. rewrite, where the rewriting, synonym generation and testing functions are
 """
 
+from rewrite import nlp, rewrite, test
 
+sentence = input("Enter the sentence here: ")
+sentence_doc = nlp(sentence)
+
+for i in range(0, len(sentence_doc)):
+	print(sentence_doc[i].pos_)
+	if sentence_doc[i].pos_ in ("NOUN", "VERB", "ADJ", "ADV"):
+		syn_sentences = rewrite(sentence, i)  # Generate synonymous sentences
+		scores = test(sentence, syn_sentences)  # Generate similarity scores for each sentence
+
+		# Function to pick the largest score
+		# Change rewrite() and test() to accept the Doc versions of "sentence" instead

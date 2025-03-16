@@ -1,57 +1,14 @@
 """
-This will be the main file.
 The goal of this project is to design a spaCy model which will refactor words for their synonyms
 
 Each sentence will be broken down to the words that make it up.
 Then the synonyms for each word will be generated. This will only apply to nouns, adjectives and verbs.
 If the synonym passes some tests, then it will be accepted.
 The tests are: synonym similarity testing, and part of speech testing.
+
+There are two files
+1. main, where the main functionality is put together, input and output is handled here.
+2. rewrite, where the rewriting, synonym generation and testing functions are
 """
 
-import spacy
-from nltk.corpus import wordnet as wn
 
-
-def get_synonyms(term):
-	synonyms = set()  # Don't have to worry about duplicate entries
-	for a in wn.synsets(term):
-		for b in a.lemmas():
-			synonyms.add(b.name().replace("_", " "))
-	return synonyms
-
-
-def rewrite(sentence: str):
-	nlp = spacy.load("en_core_web_lg")
-	sentence_doc = nlp(sentence)
-	for i in range(0, len(sentence_doc)):  # Parse every word in the sentence
-		# print(f"Name: {sentence_doc[i].text} \t Part of Speech: {sentence_doc[i].pos_} \t Lemma: {sentence_doc[i].lemma_}")
-
-		# Filter out words whose synonyms are to be generated
-		if sentence_doc[i].pos_ == "NOUN" or sentence_doc[i].pos_ == "VERB" or sentence_doc[i].pos_ == "ADJ" or sentence_doc[i].pos_ == "ADV":
-
-			synonyms = [j for j in get_synonyms(sentence_doc[i].text)]  # Generate synonyms into a list variable
-			# print(f"{sentence_doc[i]}: {synonyms}")  # Test to check the synonyms
-
-			for j in range(0, len(synonyms)):  # This takes each synonym from the list of synonyms
-
-				# This block of code creates a sentence with the current word swapped with a synonym
-				# It first checks that the synonym is not the same as the original word, and that they are the same POS
-				# If the check passes, the new sentence is checked
-				syn_sentence_list = sentence_doc.text.split()
-				print(f"Original Word: {sentence_doc[i].pos_} \t New Word: {nlp(synonyms[j])[-1].pos_}")
-				if syn_sentence_list[i] != synonyms[j] and sentence_doc[i].pos == nlp(synonyms[j])[-1].pos:
-					syn_sentence_list[i] = synonyms[j]  # This is the list variable which holds the sentence with the synonym inserted
-
-					# This block of code converts the list variable to a sentence variable
-					syn_sentence = ""
-					for k in syn_sentence_list:
-						syn_sentence += (k + " ")
-
-					# Check the similarity between the original sentence and the new sentence
-					syn_sentence = nlp(syn_sentence)
-					print(syn_sentence.text)
-					# print(sentence_doc.similarity(syn_sentence))
-
-
-rewrite("The boy is here.")
-# print(get_synonyms("car"))
